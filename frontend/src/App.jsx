@@ -19,18 +19,7 @@ const App = () => {
 
             {/* Rubric Upload Component */}
             <RubricUpload />
-
-            {/* Display Uploaded Essays */}
-            <h2 className="text-xl font-bold mt-4">Uploaded Essays</h2>
-            <ul>
-                {uploadedFiles.map(file => (
-                    <li key={file._id}>
-                        <a href={`http://localhost:5050/files/${file.filename}`} target="_blank" rel="noopener noreferrer">
-                            {file.filename}
-                        </a>
-                    </li>
-                ))}
-            </ul>
+            
         </div>
     );
 };

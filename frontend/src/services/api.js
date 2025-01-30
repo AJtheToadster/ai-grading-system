@@ -1,9 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:5000';
+const API_URL = "http://localhost:5050/api";
 
-export const uploadPDFs = async (files) => {
-    const formData = new FormData();
-    files.forEach(file => formData.append('pdfs', file));
-    return axios.post(`${API_URL}/upload`, formData);
+export const uploadEssays = (formData) => axios.post(`${API_URL}/upload`, formData, {
+    headers: { "Content-Type": "multipart/form-data" }
+});
+
+// 📝 Upload Rubric
+export const uploadRubric = (formData) => {
+    return axios.post(`${API_URL}/rubrics/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+    });
 };
+
+// 📄 Fetch Uploaded Rubrics
+export const fetchRubrics = () => {
+    return axios.get(`${API_URL}/rubrics`);
+};
+
+export const fetchUploadedFiles = () => axios.get(`${API_URL}/files`);

@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-export const detectAIContent = async (text) => {
+const detectAIContent = async (text) => {
     try {
         const response = await axios.post('https://zerogpt.p.rapidapi.com/api/v1/detectText', 
             {
@@ -24,3 +24,5 @@ export const detectAIContent = async (text) => {
         return 0; // Default to 0 if detection fails
     }
 };
+
+module.exports = { detectAIContent };

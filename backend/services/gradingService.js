@@ -40,7 +40,7 @@ const streamToString = (stream) => {
 };
 
 // AI Grading Logic
-export const gradeEssays = async (mode) => {
+const gradeEssays = async (mode) => {
     const essays = await getEssaysFromDB();
     const rubric = await getRubricFromDB();
 
@@ -81,3 +81,5 @@ export const gradeEssays = async (mode) => {
 
     return gradedEssays;
 };
+
+module.exports = { gradeEssays };

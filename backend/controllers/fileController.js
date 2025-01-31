@@ -1,7 +1,7 @@
 const { getGridFSBucket } = require("../config/gridfs");
 const { Readable } = require("stream");
 
-exports.uploadEssay = async (req, res) => {
+exports.uploadEssays = async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
@@ -22,6 +22,8 @@ exports.uploadEssay = async (req, res) => {
     }
 };
 
+
+
 exports.getEssays = async (req, res) => {
     try {
         const conn = require("mongoose").connection;
@@ -38,15 +40,18 @@ exports.getEssays = async (req, res) => {
 exports.getEssayById = async (req, res) => {
     try {
         const conn = require("mongoose").connection;
-        const file = await conn.db.collection("essays.files").findOne({ filename: req.params.id });
+        const fileId = new mongoose.Types.ObjectId(req.params.id); // ✅ Convert to ObjectId
+
+        const file = await conn.db.collection("essays.files").findOne({ _id: fileId }); // ✅ Find by `_id`
 
         if (!file) {
             return res.status(404).json({ message: "File not found" });
         }
 
-        const readstream = getGridFSBucket().openDownloadStream(file._id);
+        const readstream = getGridFSBucket().openDownloadStream(fileId);
         readstream.pipe(res);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving file", error: error.message });
     }
 };
+

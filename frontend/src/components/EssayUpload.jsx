@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { uploadEssay, fetchUploadedEssays, getEssayById } from "../services/api";
 
-const FileUpload = () => {
+const EssayUpload = () => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState("");
@@ -25,7 +25,7 @@ const FileUpload = () => {
         setMessage("");
 
         const formData = new FormData();
-        Array.from(files).forEach(file => formData.append("pdfs", file));
+        Array.from(files).forEach(file => formData.append("essayFile", file));
 
         try {
             await uploadEssay(formData);
@@ -76,4 +76,4 @@ const FileUpload = () => {
     );
 };
 
-export default FileUpload;
+export default EssayUpload;

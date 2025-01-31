@@ -7,14 +7,20 @@ exports.uploadRubric = async (req, res) => {
         if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
         const gridfsBucket = getGridFSBucket();
-
-        // Find and delete the existing rubric before uploading a new one
         const conn = mongoose.connection;
+
+        // Find the existing rubric
         const existingRubric = await conn.db.collection("rubrics.files").findOne();
 
+        // If a rubric exists, delete it
         if (existingRubric) {
-            await gridfsBucket.delete(existingRubric._id);
-            console.log(`🗑️ Deleted old rubric: ${existingRubric.filename}`);
+            try {
+                await gridfsBucket.delete(new mongoose.Types.ObjectId(existingRubric._id));
+                console.log(`🗑️ Deleted old rubric: ${existingRubric.filename}`);
+            } catch (deleteError) {
+                console.error("Error deleting existing rubric:", deleteError);
+                return res.status(500).json({ message: "Error deleting old rubric", error: deleteError.message });
+            }
         }
 
         // Upload new rubric
@@ -29,10 +35,12 @@ exports.uploadRubric = async (req, res) => {
         readableStream.pipe(uploadStream)
             .on("error", (error) => res.status(500).json({ message: "Upload failed", error: error.message }))
             .on("finish", () => res.status(201).json({ message: "Rubric uploaded successfully" }));
+
     } catch (error) {
         res.status(500).json({ message: "Upload failed", error: error.message });
     }
 };
+
 
 exports.getRubrics = async (req, res) => {
     try {
@@ -49,6 +57,10 @@ exports.getRubrics = async (req, res) => {
 
 exports.getRubricById = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ message: "Invalid rubric ID" });
+        }
+
         const gridfsBucket = getGridFSBucket();
         const fileId = new mongoose.Types.ObjectId(req.params.id);
 
@@ -58,3 +70,4 @@ exports.getRubricById = async (req, res) => {
         res.status(500).json({ message: "Error retrieving file", error: error.message });
     }
 };
+

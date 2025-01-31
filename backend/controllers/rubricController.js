@@ -1,4 +1,4 @@
-const { getGridFSBucket } = require("../config/gridfs");
+const { getGridFSRubricBucket } = require("../config/gridfs");
 const { Readable } = require("stream");
 const mongoose = require("mongoose");
 
@@ -6,7 +6,7 @@ exports.uploadRubric = async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-        const gridfsBucket = getGridFSBucket();
+        const gridfsBucket = getGridFSRubricBucket();
         const conn = mongoose.connection;
 
         // Find the existing rubric
@@ -61,7 +61,7 @@ exports.getRubricById = async (req, res) => {
             return res.status(400).json({ message: "Invalid rubric ID" });
         }
 
-        const gridfsBucket = getGridFSBucket();
+        const gridfsBucket = getGridFSRubricBucket();
         const fileId = new mongoose.Types.ObjectId(req.params.id);
 
         const readstream = gridfsBucket.openDownloadStream(fileId);

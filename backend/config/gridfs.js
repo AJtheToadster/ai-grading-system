@@ -1,18 +1,24 @@
 const mongoose = require("mongoose");
 const { GridFSBucket } = require("mongodb");
 
-let gridfsBucket;
+let gridfsEssayBucket;
+let gridfsRubricBucket;
 const conn = mongoose.connection;
 
 conn.once("open", () => {
     console.log("🔗 MongoDB Connection Open");
-    gridfsBucket = new GridFSBucket(conn.db, { bucketName: "essays" });
-    gridfsBucket = new GridFSBucket(conn.db, { bucketName: "rubrics" });
+    gridfsEssayBucket = new GridFSBucket(conn.db, { bucketName: "essays" });  // ✅ Store separately
+    gridfsRubricBucket = new GridFSBucket(conn.db, { bucketName: "rubrics" }); // ✅ Store separately
 });
 
-const getGridFSBucket = () => {
-    if (!gridfsBucket) throw new Error("GridFSBucket not initialized");
-    return gridfsBucket;
+const getGridFSEssayBucket = () => {
+    if (!gridfsEssayBucket) throw new Error("GridFS Essay Bucket not initialized");
+    return gridfsEssayBucket;
 };
 
-module.exports = { getGridFSBucket };
+const getGridFSRubricBucket = () => {
+    if (!gridfsRubricBucket) throw new Error("GridFS Rubric Bucket not initialized");
+    return gridfsRubricBucket;
+};
+
+module.exports = { getGridFSEssayBucket, getGridFSRubricBucket };

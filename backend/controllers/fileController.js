@@ -1,8 +1,8 @@
-const { getGridFSBucket } = require("../config/gridfs");
+const { getGridFSEssayBucket } = require("../config/gridfs");
 const { Readable } = require("stream");
 
 exports.uploadEssays = async (req, res) => {
-    console.log("Received files:", req.files); // ✅ Debugging
+    console.log("Received files:", req.files);
 
     try {
         if (!req.files || req.files.length === 0) {
@@ -10,7 +10,7 @@ exports.uploadEssays = async (req, res) => {
             return res.status(400).json({ message: "No files uploaded" });
         }
 
-        const gridfsBucket = getGridFSBucket();
+        const gridfsBucket = getGridFSEssayBucket();
         let uploadedFiles = [];
 
         // Process each file and upload to GridFS
@@ -62,7 +62,7 @@ exports.getEssayById = async (req, res) => {
             return res.status(404).json({ message: "File not found" });
         }
 
-        const readstream = getGridFSBucket().openDownloadStream(fileId);
+        const readstream = getGridFSEssayBucket().openDownloadStream(fileId);
         readstream.pipe(res);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving file", error: error.message });

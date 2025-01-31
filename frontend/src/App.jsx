@@ -1,6 +1,7 @@
 import React from "react";
 import EssayUpload from "./components/EssayUpload";
 import RubricUpload from "./components/RubricUpload";
+import GradingComponent from "./components/Grading";
 
 const App = () => {
   return (
@@ -12,6 +13,9 @@ const App = () => {
 
       {/* Rubric Upload Section */}
       <RubricUpload />
+
+      {/* Grading Component */}
+      <GradingComponent/>
     </div>
   );
 };

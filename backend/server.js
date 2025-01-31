@@ -4,16 +4,18 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const fileRoutes = require("./routes/fileRoutes");
 const rubricRoutes = require("./routes/rubricRoutes");
+const gradeRoutes = require("./routes/gradeRoutes");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/rubrics", rubricRoutes);
-
+app.use("/api/essays", fileRoutes);
+app.use("/api/grade", gradeRoutes);
 
 connectDB(); // Connect to MongoDB
 
-app.use("/api/essays", fileRoutes);
+
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

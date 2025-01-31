@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from "react";
-import FileUpload from "./components/FileUpload";
+import React from "react";
+import EssayUpload from "./components/EssayUpload";
 import RubricUpload from "./components/RubricUpload";
-import { fetchUploadedFiles } from "./services/api";
 
 const App = () => {
-    const [uploadedFiles, setUploadedFiles] = useState([]);
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold text-center mb-6">AI Grading System</h1>
 
-    useEffect(() => {
-        fetchUploadedFiles().then(response => setUploadedFiles(response.data));
-    }, []);
+      {/* Essay Upload Section */}
+      <EssayUpload />
 
-    return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold">AI Grading System</h1>
-
-            {/* Essay Upload Component */}
-            <FileUpload refreshFiles={() => fetchUploadedFiles().then(response => setUploadedFiles(response.data))} />
-
-            {/* Rubric Upload Component */}
-            <RubricUpload />
-            
-        </div>
-    );
+      {/* Rubric Upload Section */}
+      <RubricUpload />
+    </div>
+  );
 };
 
 export default App;

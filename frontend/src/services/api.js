@@ -2,20 +2,36 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5050/api";
 
-export const uploadEssays = (formData) => axios.post(`${API_URL}/upload`, formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-});
+// Upload essays (now stored in essays.files)
+export const uploadEssay = (formData) => {
+    return axios.post(`${API_URL}/essays/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+    });
+};
 
-// 📝 Upload Rubric
+// Fetch uploaded essays
+export const fetchUploadedEssays = () => {
+    return axios.get(`${API_URL}/essays`);
+};
+
+// Retrieve essay file by ID
+export const getEssayById = (id) => {
+    return `${API_URL}/essays/${id}`;
+};
+
+// Upload rubric to MongoDB Atlas (GridFS)
 export const uploadRubric = (formData) => {
     return axios.post(`${API_URL}/rubrics/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
     });
 };
 
-// 📄 Fetch Uploaded Rubrics
+// Fetch uploaded rubrics
 export const fetchRubrics = () => {
     return axios.get(`${API_URL}/rubrics`);
 };
 
-export const fetchUploadedFiles = () => axios.get(`${API_URL}/files`);
+// Retrieve rubric by ID
+export const getRubricById = (id) => {
+    return `${API_URL}/rubrics/${id}`;
+};

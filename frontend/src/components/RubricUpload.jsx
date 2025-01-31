@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { uploadRubric, fetchRubrics } from "../services/api";
+import { uploadRubric, fetchRubrics, getRubricById } from "../services/api";
 
 const RubricUpload = () => {
     const [rubricFile, setRubricFile] = useState(null);
@@ -7,7 +7,6 @@ const RubricUpload = () => {
     const [message, setMessage] = useState("");
     const [currentRubric, setCurrentRubric] = useState(null);
 
-    // Fetch the currently uploaded rubric on component mount
     useEffect(() => {
         fetchCurrentRubric();
     }, []);
@@ -16,7 +15,7 @@ const RubricUpload = () => {
         try {
             const response = await fetchRubrics();
             if (response.data.length > 0) {
-                setCurrentRubric(response.data[0]); // Only keep the latest rubric
+                setCurrentRubric(response.data[0]); // Keep only the latest rubric
             }
         } catch (error) {
             console.error("Failed to fetch rubric:", error);
@@ -54,7 +53,7 @@ const RubricUpload = () => {
             await uploadRubric(formData);
             setMessage("✅ Rubric uploaded successfully!");
             setRubricFile(null);
-            fetchCurrentRubric(); // Refresh the displayed rubric
+            fetchCurrentRubric(); // Refresh displayed rubric
         } catch (error) {
             setMessage("❌ Rubric upload failed. Please try again.");
             console.error("Upload error:", error);
@@ -81,19 +80,17 @@ const RubricUpload = () => {
                 {uploading ? "Uploading..." : "Upload Rubric"}
             </button>
 
-            {/* Display success/error message */}
             {message && (
                 <p className={`mt-2 ${message.includes("✅") ? "text-green-600" : "text-red-600"}`}>
                     {message}
                 </p>
             )}
 
-            {/* Display current rubric if available */}
             {currentRubric && (
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Current Rubric</h3>
                     <a
-                        href={`http://localhost:5050/${currentRubric.filepath}`}
+                        href={getRubricById(currentRubric._id)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"

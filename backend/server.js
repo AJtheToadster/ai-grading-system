@@ -13,7 +13,7 @@ app.use("/api/rubrics", rubricRoutes);
 
 connectDB(); // Connect to MongoDB
 
-app.use("/api", fileRoutes);
+app.use("/api/essays", fileRoutes);
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

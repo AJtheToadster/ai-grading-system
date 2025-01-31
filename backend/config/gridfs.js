@@ -6,7 +6,8 @@ const conn = mongoose.connection;
 
 conn.once("open", () => {
     console.log("🔗 MongoDB Connection Open");
-    gridfsBucket = new GridFSBucket(conn.db, { bucketName: "uploads" });
+    gridfsBucket = new GridFSBucket(conn.db, { bucketName: "essays" });
+    gridfsBucket = new GridFSBucket(conn.db, { bucketName: "rubrics" });
 });
 
 const getGridFSBucket = () => {

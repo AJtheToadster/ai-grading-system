@@ -20,13 +20,16 @@ const EssayUpload = () => {
             setMessage("⚠️ Please select files to upload.");
             return;
         }
-
+    
         setUploading(true);
         setMessage("");
-
+    
         const formData = new FormData();
-        Array.from(files).forEach(file => formData.append("essayFile", file));
+        for (let i = 0; i < files.length; i++) {
+            formData.append("essayFile", files[i]);
+        }
 
+        console.log(formData);
         try {
             await uploadEssay(formData);
             setMessage("✅ Upload successful!");
@@ -39,6 +42,7 @@ const EssayUpload = () => {
             setUploading(false);
         }
     };
+    
 
     const fetchUploadedEssaysList = async () => {
         try {

@@ -2,30 +2,39 @@ const { getGridFSBucket } = require("../config/gridfs");
 const { Readable } = require("stream");
 
 exports.uploadEssays = async (req, res) => {
-    try {
-        console.log("Incoming file:", req.file);
+    console.log("Received files:", req.files); // ✅ Debugging
 
-        if (!req.file) {
-            console.error("No file received!");
-            return res.status(400).json({ message: "No file uploaded" });
+    try {
+        if (!req.files || req.files.length === 0) {
+            console.error("No files received!");
+            return res.status(400).json({ message: "No files uploaded" });
         }
 
         const gridfsBucket = getGridFSBucket();
-        const readableStream = new Readable();
-        readableStream.push(req.file.buffer);
-        readableStream.push(null);
+        let uploadedFiles = [];
 
-        const uploadStream = gridfsBucket.openUploadStream(req.file.originalname, {
-            metadata: { contentType: req.file.mimetype }
-        });
+        // Process each file and upload to GridFS
+        for (let file of req.files) {
+            const readableStream = new Readable();
+            readableStream.push(file.buffer);
+            readableStream.push(null);
 
-        readableStream.pipe(uploadStream)
-            .on("error", (error) => res.status(500).json({ message: "Upload failed", error: error.message }))
-            .on("finish", () => res.status(201).json({ message: "Essay uploaded successfully" }));
+            const uploadStream = gridfsBucket.openUploadStream(file.originalname, {
+                metadata: { contentType: file.mimetype }
+            });
+
+            readableStream.pipe(uploadStream)
+                .on("finish", () => {
+                    uploadedFiles.push({ filename: file.originalname });
+                });
+        }
+
+        res.status(201).json({ message: "Essays uploaded successfully", files: uploadedFiles });
     } catch (error) {
         res.status(500).json({ message: "Upload failed", error: error.message });
     }
 };
+
 
 
 

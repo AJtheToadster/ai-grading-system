@@ -3,7 +3,12 @@ const { Readable } = require("stream");
 
 exports.uploadEssays = async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+        console.log("Incoming file:", req.file);
+
+        if (!req.file) {
+            console.error("No file received!");
+            return res.status(400).json({ message: "No file uploaded" });
+        }
 
         const gridfsBucket = getGridFSBucket();
         const readableStream = new Readable();

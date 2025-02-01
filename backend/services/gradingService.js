@@ -5,8 +5,17 @@ const { Readable } = require('stream');
 const { getEssays } = require('../controllers/fileController.js');
 const { getRubrics } = require('../controllers/rubricController.js');
 
-const axios = require('axios');
+// Convert stream to string (helper function)
+const streamToString = (stream) => {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        stream.on('data', (chunk) => chunks.push(chunk));
+        stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+        stream.on('error', reject);
+    });
+};
 
+// AI Grading Logic
 const gradeEssays = async (mode) => {
     // Debug: Check if environment variables are loaded
     console.log('Checking environment variables...');
@@ -16,7 +25,7 @@ const gradeEssays = async (mode) => {
     try {
         const response = await axios.post('https://api.openai.com/v1/chat/completions', 
             {
-                model: 'gpt-4',
+                model: 'gpt-3.5-turbo',
                 messages: [{ role: 'user', content: 'test' }]
             },
             {
@@ -36,19 +45,6 @@ const gradeEssays = async (mode) => {
         });
         throw error;
     }
-}
-// Convert stream to string (helper function)
-const streamToString = (stream) => {
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        stream.on('data', (chunk) => chunks.push(chunk));
-        stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
-        stream.on('error', reject);
-    });
-};
-
-// AI Grading Logic
-const gradeEssays = async (mode) => {
     const essays = await getEssays();
     console.log("these are the essays");
     console.log(essays);
@@ -64,7 +60,7 @@ const gradeEssays = async (mode) => {
         try {
             // Call OpenAI API for grading
             const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-                model: 'gpt-4',
+                model: 'gpt-3.5-turbo',
                 messages: [{ role: 'user', content: prompt }],
             }, {
                 headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }

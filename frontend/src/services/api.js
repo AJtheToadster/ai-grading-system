@@ -37,8 +37,9 @@ export const getRubricById = (id) => {
 };
 
 // Grade essays based on grading mode
-export const gradeEssays = ( {mode: gradingMode} ) => {
-    return axios.post(`${API_URL}/grade/`, gradingMode);
+export const gradeEssays = (gradingMode) => {
+    console.log(`This is the grading mode ${gradingMode}`)
+    return axios.post(`${API_URL}/grade/`, {gradingMode});
 }
 
 // Grade essays based on grading mode

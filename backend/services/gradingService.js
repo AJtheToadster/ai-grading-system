@@ -5,6 +5,38 @@ const { Readable } = require('stream');
 const { getEssays } = require('../controllers/fileController.js');
 const { getRubrics } = require('../controllers/rubricController.js');
 
+const axios = require('axios');
+
+const gradeEssays = async (mode) => {
+    // Debug: Check if environment variables are loaded
+    console.log('Checking environment variables...');
+    console.log('OPENAI_API_KEY exists:', !!process.env.OPENAI_API_KEY);
+    console.log('OPENAI_API_KEY length:', process.env.OPENAI_API_KEY?.length);
+    
+    try {
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', 
+            {
+                model: 'gpt-4',
+                messages: [{ role: 'user', content: 'test' }]
+            },
+            {
+                headers: { 
+                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        console.log('OpenAI API test successful');
+    } catch (error) {
+        console.error('OpenAI API Error:', {
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            headers: error.response?.headers
+        });
+        throw error;
+    }
+}
 // Convert stream to string (helper function)
 const streamToString = (stream) => {
     return new Promise((resolve, reject) => {

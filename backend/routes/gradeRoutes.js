@@ -7,7 +7,7 @@ router.post('/', async (req, res) => {
     try {
         const { mode } = req.body;
         console.log("This is the mode")
-        console.log(req.body)
+        console.log(req)
         const results = await gradeEssays(mode);
         res.json(results);
     } catch (error) {

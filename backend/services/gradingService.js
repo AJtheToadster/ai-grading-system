@@ -2,32 +2,8 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const { detectAIContent } = require('./aiDetectionService.js');
 const { Readable } = require('stream');
-
-
-const conn = mongoose.connection;
-
-// Function to get essay content from GridFS
-const getEssaysFromDB = async () => {
-    const files = await conn.db.collection('essays.files').find().toArray();
-    const essays = [];
-
-    for (const file of files) {
-        const stream = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'essays' }).openDownloadStream(file._id);
-        const content = await streamToString(stream);
-        essays.push({ _id: file._id, content });
-    }
-
-    return essays;
-};
-
-// Function to get rubric content from GridFS
-const getRubricFromDB = async () => {
-    const file = await conn.db.collection('rubric.files').findOne();
-    if (!file) return null;
-
-    const stream = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'rubric' }).openDownloadStream(file._id);
-    return await streamToString(stream);
-};
+const { getEssays } = require('../controllers/fileController.js');
+const { getRubrics } = require('../controllers/rubricController.js');
 
 // Convert stream to string (helper function)
 const streamToString = (stream) => {
@@ -41,8 +17,10 @@ const streamToString = (stream) => {
 
 // AI Grading Logic
 const gradeEssays = async (mode) => {
-    const essays = await getEssaysFromDB();
-    const rubric = await getRubricFromDB();
+    const essays = await getEssays();
+    console.log("these are the essays");
+    console.log(essays);
+    const rubric = await getRubrics();
 
     if (!essays.length || !rubric) throw new Error('Essays or rubric not found');
 

@@ -35,3 +35,13 @@ export const fetchRubrics = () => {
 export const getRubricById = (id) => {
     return `${API_URL}/rubrics/${id}`;
 };
+
+// Grade essays based on grading mode
+export const gradeEssays = ( {mode: gradingMode} ) => {
+    return axios.post(`${API_URL}/grade/`, gradingMode);
+}
+
+// Grade essays based on grading mode
+export const checkAIContent = () => {
+    return axios.post(`${API_URL}/checkAIContent`);
+}

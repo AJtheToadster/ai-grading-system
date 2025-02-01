@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import { checkAIContent, gradeEssays } from '../services/api';
 
 const GradingComponent = () => {
   const [grades, setGrades] = useState([]);
@@ -10,11 +10,11 @@ const GradingComponent = () => {
   const handleGrading = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/grade', { mode: gradingMode });
+      const response = gradeEssays(gradingMode);
       if (gradingMode === 'full') {
-        setGrades(response.data.grades);
+        setGrades(response.data);
       } else {
-        setFlaggedReviews(response.data.flagged);
+        setFlaggedReviews(response.data);
       }
     } catch (error) {
       console.error('Error grading essays:', error);

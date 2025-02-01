@@ -13,7 +13,7 @@ const detectAIContent = async (text) => {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-rapidapi-host': 'zerogpt.p.rapidapi.com',
-                    'x-rapidapi-key': process.env.RAPIDAPI_KEY
+                    'x-rapidapi-key': process.env.ZEROGPT_API_KEY
                 }
             }
         );

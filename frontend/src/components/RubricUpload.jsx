@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { uploadRubric, fetchRubrics, getRubricById } from "../services/api";
+import { useState, useEffect } from "react";
+import { uploadRubric, fetchRubrics } from "../services/api";  // Removed getRubricById as href doesn't need function
 
 const RubricUpload = () => {
     const [rubricFile, setRubricFile] = useState(null);
@@ -11,21 +11,44 @@ const RubricUpload = () => {
         fetchCurrentRubric();
     }, []);
 
+    // Fetch the current rubric from the server
     const fetchCurrentRubric = async () => {
         try {
             const response = await fetchRubrics();
-            if (response.data.length > 0) {
-                setCurrentRubric(response.data[0]); // Keep only the latest rubric
+
+            // Handle cases where API returns a single object or array
+            const rubricData = Array.isArray(response.data) ? response.data[0] : response.data;
+
+            if (rubricData) {
+                setCurrentRubric(rubricData);
+            } else {
+                setCurrentRubric(null);
             }
         } catch (error) {
             console.error("Failed to fetch rubric:", error);
+            setMessage("❌ Failed to fetch current rubric.");
         }
     };
 
+    // Handle file selection with validation
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
 
         if (!selectedFile) return;
+
+        // Validate file type
+        const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/json', 'text/csv'];
+        if (!allowedTypes.includes(selectedFile.type)) {
+            setMessage("⚠️ Unsupported file type. Please upload a PDF, DOCX, JSON, or CSV.");
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        const maxSizeMB = 5;
+        if (selectedFile.size > maxSizeMB * 1024 * 1024) {
+            setMessage(`⚠️ File size exceeds ${maxSizeMB}MB limit.`);
+            return;
+        }
 
         if (currentRubric) {
             const confirmReplace = window.confirm(
@@ -35,8 +58,10 @@ const RubricUpload = () => {
         }
 
         setRubricFile(selectedFile);
+        setMessage("");  // Clear any previous messages
     };
 
+    // Handle rubric upload to the server
     const handleUpload = async () => {
         if (!rubricFile) {
             setMessage("⚠️ Please select a rubric file.");
@@ -50,12 +75,13 @@ const RubricUpload = () => {
         formData.append("rubricFile", rubricFile);
 
         try {
-            await uploadRubric(formData);
+            const response = await uploadRubric(formData);
             setMessage("✅ Rubric uploaded successfully!");
             setRubricFile(null);
-            fetchCurrentRubric(); // Refresh displayed rubric
+            fetchCurrentRubric();  // Refresh displayed rubric
         } catch (error) {
-            setMessage("❌ Rubric upload failed. Please try again.");
+            const errorMsg = error.response?.data?.message || "Rubric upload failed. Please try again.";
+            setMessage(`❌ ${errorMsg}`);
             console.error("Upload error:", error);
         } finally {
             setUploading(false);
@@ -80,17 +106,19 @@ const RubricUpload = () => {
                 {uploading ? "Uploading..." : "Upload Rubric"}
             </button>
 
+            {/* Display success or error messages */}
             {message && (
                 <p className={`mt-2 ${message.includes("✅") ? "text-green-600" : "text-red-600"}`}>
                     {message}
                 </p>
             )}
 
+            {/* Display current rubric if available */}
             {currentRubric && (
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Current Rubric</h3>
                     <a
-                        href={getRubricById(currentRubric._id)}
+                        href={`http://localhost:5050/api/rubrics/${currentRubric._id}`}  // Corrected URL construction
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 underline"

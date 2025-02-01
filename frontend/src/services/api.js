@@ -38,11 +38,25 @@ export const getRubricById = (id) => {
 
 // Grade essays based on grading mode
 export const gradeEssays = (gradingMode) => {
-    console.log(`This is the grading mode ${gradingMode}`)
     return axios.post(`${API_URL}/grade/`, {gradingMode});
 }
 
 // Grade essays based on grading mode
 export const checkAIContent = () => {
     return axios.post(`${API_URL}/checkAIContent`);
+}
+
+// Upload grades to database
+export const uploadGrades = (gradedData) => {
+    return axios.post(`${API_URL}/grade/upload`, gradedData);
+}
+
+// Get grades from database by ID
+export const getGrades = () => {
+    return axios.get(`${API_URL}/grade/fetch`);
+}
+
+// Get grades from database by ID
+export const getGradesById = (id) => {
+    return axios.get(`${API_URL}/grade/${id}`);
 }

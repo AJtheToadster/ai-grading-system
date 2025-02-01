@@ -3,7 +3,6 @@ const pdfParse = require('pdf-parse');  // Import pdf-parse
 const { Readable } = require("stream");
 
 exports.uploadEssays = async (req, res) => {
-    console.log("Received files:", req.files);
 
     try {
         if (!req.files || req.files.length === 0) {

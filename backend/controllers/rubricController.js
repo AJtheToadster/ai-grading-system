@@ -3,45 +3,6 @@ const { Readable } = require("stream");
 const pdfParse = require('pdf-parse');
 const mongoose = require("mongoose");
 
-// exports.uploadRubric = async (req, res) => {
-//     try {
-//         if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-//         const gridfsBucket = getGridFSRubricBucket();
-//         const conn = mongoose.connection;
-
-//         // Find the existing rubric
-//         const existingRubric = await conn.db.collection("rubrics.files").findOne();
-
-//         // If a rubric exists, delete it
-//         if (existingRubric) {
-//             try {
-//                 await gridfsBucket.delete(new mongoose.Types.ObjectId(existingRubric._id));
-//                 console.log(`🗑️ Deleted old rubric: ${existingRubric.filename}`);
-//             } catch (deleteError) {
-//                 console.error("Error deleting existing rubric:", deleteError);
-//                 return res.status(500).json({ message: "Error deleting old rubric", error: deleteError.message });
-//             }
-//         }
-
-//         // Upload new rubric
-//         const readableStream = new Readable();
-//         readableStream.push(req.file.buffer);
-//         readableStream.push(null);
-
-//         const uploadStream = gridfsBucket.openUploadStream(req.file.originalname, {
-//             metadata: { contentType: req.file.mimetype }
-//         });
-
-//         readableStream.pipe(uploadStream)
-//             .on("error", (error) => res.status(500).json({ message: "Upload failed", error: error.message }))
-//             .on("finish", () => res.status(201).json({ message: "Rubric uploaded successfully" }));
-
-//     } catch (error) {
-//         res.status(500).json({ message: "Upload failed", error: error.message });
-//     }
-// };
-
 exports.uploadRubric = async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: "No file uploaded" });

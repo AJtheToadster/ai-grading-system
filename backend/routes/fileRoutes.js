@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../config/multerConfig");
-const { uploadEssays, getEssayById, getEssays } = require("../controllers/fileController");
+const { uploadEssays, getEssayById, getEssays, getEssaysWithContent } = require("../controllers/fileController");
 
 const router = express.Router();
 

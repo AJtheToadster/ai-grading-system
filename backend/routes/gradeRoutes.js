@@ -5,9 +5,7 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try {
-        const { mode } = req.body;
-        console.log("This is the mode")
-        console.log(req)
+        const { mode } = req.body.gradingMode;
         const results = await gradeEssays(mode);
         res.json(results);
     } catch (error) {

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5050/api";
+// Use environment variable to handle API URL
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050/api";
 
 // Upload essays
 export const uploadEssay = (formData) => {
@@ -38,25 +39,25 @@ export const getRubricById = (id) => {
 
 // Grade essays based on grading mode
 export const gradeEssays = (gradingMode) => {
-    return axios.post(`${API_URL}/grade/`, {gradingMode});
-}
+    return axios.post(`${API_URL}/grade/`, { gradingMode });
+};
 
-// Grade essays based on grading mode
+// Check for AI-generated content
 export const checkAIContent = () => {
     return axios.post(`${API_URL}/checkAIContent`);
-}
+};
 
-// Upload grades to database
+// Upload grades to the database
 export const uploadGrades = (gradedData) => {
     return axios.post(`${API_URL}/grade/upload`, gradedData);
-}
+};
 
-// Get grades from database by ID
+// Get all grades from the database
 export const getGrades = () => {
     return axios.get(`${API_URL}/grade/fetch`);
-}
+};
 
-// Get grades from database by ID
+// Get grades by ID
 export const getGradesById = (id) => {
     return axios.get(`${API_URL}/grade/${id}`);
-}
+};

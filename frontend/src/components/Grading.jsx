@@ -125,7 +125,8 @@ const GradingComponent = () => {
                 className={`p-2 border-b ${grade.flagged ? 'bg-red-100' : ''}`}
               >
                 <strong>Essay ID:</strong> {grade.essayId} <br />
-                <strong>Score/Feedback:</strong> {grade.score} <br />
+                <strong>Score:</strong> {grade.score} <br />
+                <strong>Feedback:</strong> {grade.feedback} <br />
                 <strong>Flagged:</strong> {grade.flagged ? 'Yes' : 'No'}
               </li>
             ))}

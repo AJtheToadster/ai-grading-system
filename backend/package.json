@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "nodemon server.js",
+    "build": "npm install",
+    "start": "node server.js",
     "vercel-build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

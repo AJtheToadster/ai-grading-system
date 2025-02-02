@@ -1,7 +1,7 @@
 import axios from "axios";
-
+// process.env.REACT_APP_BACKEND_URL || 
 // Use environment variable to handle API URL
-const API_URL = process.env.REACT_APP_BACKEND_URL || "https://ai-grading-system-backend-d26df6d81f7c.herokuapp.com/api";
+const API_URL = "https://localhost:5050/api";
 
 // Upload essays
 export const uploadEssay = (formData) => {

@@ -17,8 +17,9 @@ const detectAIContent = async (text) => {
                 }
             }
         );
+        console.log('AI detection response:', response.data.data.is_gpt_generated);
 
-        return response.data.confidence; // Confidence score in % (0-100)
+        return response.data.data.is_gpt_generated; // Confidence score in % (0-100)
     } catch (error) {
         console.error('AI detection failed:', error);
         return 0; // Default to 0 if detection fails

@@ -127,7 +127,8 @@ const GradingComponent = () => {
                 <strong>Essay ID:</strong> {grade.essayId} <br />
                 <strong>Score:</strong> {grade.score} <br />
                 <strong>Feedback:</strong> {grade.feedback} <br />
-                <strong>Flagged:</strong> {grade.flagged ? 'Yes' : 'No'}
+                <strong>Flagged:</strong> {grade.flagged ? 'Yes' : 'No'} <br />
+                <strong>AI Confidence:</strong> {grade.aiConfidence}
               </li>
             ))}
           </ul>
